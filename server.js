@@ -1,5 +1,6 @@
-// expressをrequireする
+// インポート
 const express = require("express");
+const {Client} = require("pg");
 
 // ポート番号を設定
 const portNumber = 80;
@@ -17,7 +18,7 @@ const client = new Client({
 });
 
 
-// JSON返信
+JSON返信
 app.get("/", (req, res) => {
     res.set({ 'Access-Control-Allow-Origin': '*' });
     // res.status(200).send({ id: 1, message: "DBサーバーからのメッセージ" });
@@ -28,18 +29,21 @@ app.get("/", (req, res) => {
 app.listen(portNumber);
 
 console.log(`PortNumber is ${portNumber}`);
+console.log(ViewTable());
 
 function ViewTable(){
     client.connect();
 
     const query = "SELECT id, task, to_char(deadline,'YYYY年MM月DD日HH時MI分SS秒') AS deadline FROM tasks ORDER BY id";
-    const result = client.query(query)
+    let result;
+    client.query(query)
     .then((res) =>{
-        return res.rows;
+        result = res.rows;
+        client.end();
+        return result;
     })
     .catch((err) => {
         console.error(err.stack);
+        client.end();
     });
-    client.end();
-    return result;
 }
