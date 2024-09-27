@@ -8,14 +8,14 @@ const portNumber = 80;
 // appオブジェクトを作成する
 const app = express();
 
-// インスタンスの作成
-const client = new Client({
-    user: "postgres",
-    host: "localhost",
-    database: "todolist",
-    password: "tetraDev2024",
-    port: "5432"
-});
+// // インスタンスの作成
+// const client = new Client({
+//     user: "postgres",
+//     host: "localhost",
+//     database: "todolist",
+//     password: "tetraDev2024",
+//     port: "5432"
+// });
 
 /*
 JSON返信
@@ -48,7 +48,7 @@ console.log(`PortNumber is ${portNumber}`);
     // console.log(`PortNumber is ${portNumber}`);
 // }
 
-console.log(await ViewTable());
+// console.log(await ViewTable());
 
 // JSON返信
 app.get("/", async(req, res) => {
@@ -63,6 +63,15 @@ console.log(`PortNumber is ${portNumber}`);
 
 // 関数
 async function ViewTable(){
+    // インスタンスの作成
+    const client = new Client({
+        user: "postgres",
+        host: "localhost",
+        database: "todolist",
+        password: "tetraDev2024",
+        port: "5432"
+    });
+
     client.connect();
 
     const query = "SELECT id, task, to_char(deadline,'YYYY年MM月DD日HH時MI分SS秒') AS deadline FROM tasks ORDER BY id";
