@@ -30,12 +30,43 @@ app.listen(portNumber);
 
 console.log(`PortNumber is ${portNumber}`);
 */
-console.log(ViewTable());
 
+// main();
+// async function main(){
+    // console.log(await ViewTable());
+    // // tasks = await ViewTable();
+
+    // // JSON返信
+    // app.get("/", async(req, res) => {
+    // res.set({ 'Access-Control-Allow-Origin': '*' });
+    // res.status(200).send(await ViewTable());
+    // });
+
+    // // リクエストを待ち受ける
+    // app.listen(portNumber);
+
+    // console.log(`PortNumber is ${portNumber}`);
+// }
+
+console.log(await ViewTable());
+
+// JSON返信
+app.get("/", async(req, res) => {
+res.set({ 'Access-Control-Allow-Origin': '*' });
+res.status(200).send(await ViewTable());
+});
+
+// リクエストを待ち受ける
+app.listen(portNumber);
+
+console.log(`PortNumber is ${portNumber}`);
+
+// 関数
 async function ViewTable(){
     client.connect();
 
     const query = "SELECT id, task, to_char(deadline,'YYYY年MM月DD日HH時MI分SS秒') AS deadline FROM tasks ORDER BY id";
+
     /*
     let result;
     client.query(query)
@@ -50,10 +81,8 @@ async function ViewTable(){
     });
     */
 
-    const result = await client.query(query)(res => {
-        result = res.rows;
-        client.end();
-    })
-
+    const res = await client.query(query);
+    result = res.rows;
+    await client.end();
     return result;
 }
