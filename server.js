@@ -17,7 +17,7 @@ const client = new Client({
     port: "5432"
 });
 
-
+/*
 JSON返信
 app.get("/", (req, res) => {
     res.set({ 'Access-Control-Allow-Origin': '*' });
@@ -29,12 +29,14 @@ app.get("/", (req, res) => {
 app.listen(portNumber);
 
 console.log(`PortNumber is ${portNumber}`);
+*/
 console.log(ViewTable());
 
-function ViewTable(){
+async function ViewTable(){
     client.connect();
 
     const query = "SELECT id, task, to_char(deadline,'YYYY年MM月DD日HH時MI分SS秒') AS deadline FROM tasks ORDER BY id";
+    /*
     let result;
     client.query(query)
     .then((res) =>{
@@ -46,4 +48,12 @@ function ViewTable(){
         console.error(err.stack);
         client.end();
     });
+    */
+
+    const result = await client.query(query)(res => {
+        result = res.rows;
+        client.end();
+    })
+
+    return result;
 }
