@@ -9,7 +9,7 @@ const portNumber = 80;
 const app = express();
 
 const cors = (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Origin", "http://13.231.30.42:3000");
     res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
     res.header("Access-Control-Allow-Headers", "Origin, Content-Type");
     next();
