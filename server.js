@@ -8,23 +8,37 @@ const portNumber = 80;
 // appオブジェクトを作成する
 const app = express();
 
-// Getリクエスト
-app.get("/", async(req, res) => {
-    res.set({ 'Access-Control-Allow-Origin': '*' });
-    res.status(200).send(await ViewTable());
-});
+const cors = (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, Content-Type");
+    next();
+};
 
-// Postリクエスト
-app.post("/:task", async(req, res) => {
-    res.set({ 'Access-Control-Allow-Origin': '*' });
-    res.status(200).send(await RegisterTask(req.params.task));
-});
+app.use(cors);
+app.use(express.json());
 
-// リクエストを待ち受ける
+// リクエスト待機
 app.listen(portNumber);
 
 console.log(`PortNumber is ${portNumber}`);
 
+// ----------------------------------------
+// リクエスト
+// ----------------------------------------
+// Getリクエスト
+app.get("/", async(req, res) => {
+    res.status(200).send(await ViewTable());
+});
+
+// Postリクエスト
+app.post("/", async(req, res) => {
+    res.status(200).send(await RegisterTask(req.body.task));
+});
+
+// ----------------------------------------
+// データベース操作
+// ----------------------------------------
 // テーブル表示
 async function ViewTable(){
     // インスタンスの作成
