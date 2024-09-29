@@ -74,7 +74,7 @@ async function RegisterTask(task){
     client.connect();
 
     const query = {
-        text: "INSERT INTO tasklist (task) VALUES ($1)",
+        text: "INSERT INTO tasks (task) VALUES ($1)",
         values: [task],
     };
 
